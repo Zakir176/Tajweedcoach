@@ -1,0 +1,808 @@
+
+
+
+
+TAJWEED RECITATION COACH
+AI-Powered Quran Recitation Learning Platform
+
+
+PROJECT DOCUMENTATION SUITE
+System Requirements Specification  |  Architecture Design  |  Technical Documentation
+Version
+1.0.0 — Initial Release
+Date
+April 2026
+Stack
+Vue.js  |  Python FastAPI  |  OpenAI Whisper
+Status
+Pre-Development
+1. Introduction
+
+1.1 Purpose
+This document is the complete technical and functional specification for the Tajweed Recitation Coach — an AI-powered web application designed to help self-teaching Muslims improve their Quran recitation. It covers system requirements, architecture design, data models, API contracts, and the development roadmap.
+
+1.2 Problem Statement
+Millions of Muslims worldwide wish to recite the Quran correctly but lack access to qualified teachers, especially those in non-Arabic-speaking or diaspora communities. Current self-teaching methods such as YouTube videos and audio apps are entirely passive. They demonstrate what correct recitation sounds like but provide zero feedback on whether the learner is actually pronouncing correctly. There is no feedback loop for self-learners.
+
+1.3 Proposed Solution
+A voice-processing web application where users:
+Select a Quranic verse they wish to practice
+Record their recitation via browser microphone
+Receive AI-generated feedback on accuracy and pronunciation errors
+Hear reference audio of a qualified sheikh reciting the same verse
+
+1.4 Scope
+In Scope — MVP
+  Verse selection by Surah and Ayah number
+  In-browser audio recording via Web Audio API
+  Arabic speech-to-text transcription using OpenAI Whisper
+  Text comparison between transcription and correct Quranic text
+  AI-generated human-readable feedback via LLM (Claude)
+  Reference audio playback from EveryAyah.com per verse
+  User progress tracking: verses practiced and accuracy over time
+  Responsive PWA — works on desktop and mobile browsers
+
+Out of Scope — MVP
+  Real-time live feedback during recitation (post-MVP)
+  Full tajweed rule engine: ghunna, idghaam, madd length detection (post-MVP)
+  Offline mode
+  Social or community features
+  Multi-language UI: Arabic, Urdu (post-MVP)
+
+1.5 Definitions
+Term
+Definition
+Tajweed
+Rules governing correct pronunciation in Quran recitation
+Makhaarij
+Articulation points of Arabic letters in the mouth and throat
+Ayah
+A single verse of the Quran
+Surah
+A chapter of the Quran — 114 total
+Whisper
+OpenAI open-source speech recognition model with strong Arabic support
+PWA
+Progressive Web App — web app installable on mobile and desktop
+FastAPI
+High-performance async Python web framework for building APIs
+EveryAyah
+Free audio CDN with verse-level Quran recitations by multiple shuyookh
+2. Stakeholders & User Stories
+
+2.1 Stakeholders
+Stakeholder
+Role
+Interest
+Self-teaching Muslim
+Primary User
+Improve recitation accuracy without a physical teacher
+Developer
+Builder and Owner
+Build a meaningful product using Vue.js and Python
+Islamic Institutions
+Potential Partner
+Tool for students in madrasas and weekend schools
+AI Providers
+Technology Partner
+API usage for speech and language model services
+
+2.2 User Personas
+Persona 1: The Diaspora Learner
+"I grew up in Zambia. I know how to read Arabic letters but my pronunciation is poor. I watch YouTube but I never know if I am doing it right."
+Age 18-30, high tech comfort, comfortable with web and mobile apps
+Goal: Recite correctly, especially Al-Fatiha and the short surahs
+Pain point: No feedback, no way to measure progress
+
+Persona 2: The Reverted Muslim
+"I am new to Islam. I have no background in Arabic and I am learning recitation basics from scratch."
+Age 25-45, medium tech comfort
+Goal: Learn to recite basic prayers correctly
+Pain point: Cannot afford or access a private tutor
+
+2.3 User Stories
+ID
+User Story
+Acceptance Criteria
+Priority
+US-01
+As a user I want to select any verse by Surah and Ayah so I can practice what I am studying
+Surah and Ayah selectors present; correct verse text loads
+Must Have
+US-02
+As a user I want to record my recitation in-browser without external software
+Record button triggers mic; audio captured; waveform visible
+Must Have
+US-03
+As a user I want feedback on what I said vs what I should have said
+Transcription shown; diff highlighted; LLM feedback displayed
+Must Have
+US-04
+As a user I want to hear a sheikh recite the verse to compare with my own recording
+Audio player loads correct verse; controls work
+Must Have
+US-05
+As a user I want to see my history to track which verses I have practiced
+History shows sessions with date, verse, and score
+Should Have
+US-06
+As a user I want an account so my progress persists across devices
+Register, login, JWT auth; history tied to account
+Should Have
+US-07
+As a user I want the app on my phone so I can practice anywhere
+PWA installable; responsive on 375px screens
+Should Have
+US-08
+As a user I want to choose which sheikh voice to hear for reference audio
+Sheikh selector with 3 or more options available
+Nice to Have
+3. Functional Requirements
+
+3.1 Verse Selection
+ID
+Requirement
+Priority
+Source
+FR-01
+System shall provide a searchable dropdown of all 114 Surahs with Arabic and English names
+Must Have
+US-01
+FR-02
+System shall dynamically load the valid Ayah range based on selected Surah
+Must Have
+US-01
+FR-03
+System shall display the selected verse in Arabic Uthmani script with harakat
+Must Have
+US-01
+FR-04
+System shall display an English translation below the Arabic text
+Should Have
+US-01
+
+3.2 Audio Recording
+ID
+Requirement
+Priority
+Source
+FR-05
+System shall request microphone permission via the browser Web Audio API
+Must Have
+US-02
+FR-06
+System shall display a real-time audio waveform during recording
+Should Have
+US-02
+FR-07
+System shall capture audio in WebM/Opus format and convert server-side if required
+Must Have
+US-02
+FR-08
+System shall allow user to replay their recording before submitting for analysis
+Should Have
+US-02
+FR-09
+System shall enforce a maximum recording duration of 120 seconds
+Must Have
+US-02
+
+3.3 Feedback Engine
+ID
+Requirement
+Priority
+Source
+FR-10
+System shall transcribe Arabic audio using OpenAI Whisper large-v3 model
+Must Have
+US-03
+FR-11
+System shall compare Whisper output to correct Quranic text using edit-distance algorithm
+Must Have
+US-03
+FR-12
+System shall display a word-by-word diff highlighting correct, incorrect, and missing words
+Must Have
+US-03
+FR-13
+System shall compute an accuracy score 0 to 100 based on word match ratio
+Must Have
+US-03
+FR-14
+System shall send transcription and expected text to LLM for human-readable feedback generation
+Must Have
+US-03
+FR-15
+LLM feedback shall identify specific letter-level errors where possible
+Must Have
+US-03
+
+3.4 Reference Audio
+ID
+Requirement
+Priority
+Source
+FR-16
+System shall fetch and play verse-specific audio from EveryAyah.com CDN
+Must Have
+US-04
+FR-17
+System shall provide playback controls: play, pause, replay, and speed 0.75x 1x 1.25x
+Must Have
+US-04
+FR-18
+System shall support at least 3 sheikh options: Husary, Minshawi, and Al-Afasy
+Should Have
+US-08
+4. Non-Functional Requirements
+
+Category
+ID
+Requirement
+Target
+Performance
+NFR-01
+Audio transcription and feedback returned to user
+< 8 seconds
+Performance
+NFR-02
+Page initial load time on 4G mobile connection
+< 3 seconds
+Availability
+NFR-03
+System uptime target per calendar month
+99%
+Security
+NFR-04
+All user API endpoints require JWT Bearer authentication
+Verified by tests
+Security
+NFR-05
+Audio files deleted from server after processing
+Within 1 hour
+Privacy
+NFR-06
+No audio stored permanently without explicit user consent
+Privacy policy
+Scalability
+NFR-07
+Concurrent user load the system must handle at MVP stage
+100 concurrent
+Usability
+NFR-08
+Core recitation loop completable with no written instructions
+Usability test
+Accessibility
+NFR-09
+App meets web accessibility standard
+WCAG 2.1 AA
+Portability
+NFR-10
+Works on Chrome, Firefox, Safari, and mobile browsers
+Cross-browser test
+5. System Architecture
+
+5.1 Overview
+The Tajweed Recitation Coach follows a three-tier client-server architecture with a dedicated AI processing pipeline. Each layer is independently deployable and scalable.
+
+Architecture Layers
+  Tier 1 — Presentation:   Vue 3 SPA / PWA (Vite build, Tailwind CSS)
+  Tier 2 — Application:    Python FastAPI REST backend
+  Tier 3 — Data:           PostgreSQL (relational) + Redis (cache and queue)
+  AI Layer:                OpenAI Whisper (STT) + Claude API (feedback generation)
+  External Services:       EveryAyah.com (audio CDN) and Quran.com API (verse text)
+
+5.2 Component Responsibilities
+Component
+Technology
+Responsibility
+Frontend SPA
+Vue 3 + Vite + Tailwind
+UI rendering, audio capture, state management via Pinia
+API Gateway
+FastAPI Python 3.11
+REST endpoints, auth middleware, request routing
+Auth Service
+FastAPI + JWT + bcrypt
+User registration, login, and token lifecycle
+STT Processor
+OpenAI Whisper large-v3
+Arabic audio-to-text transcription
+Feedback Engine
+Claude Sonnet API
+Natural language feedback generation from diff results
+Diff Engine
+Python difflib + Levenshtein
+Word-level comparison of transcription vs expected text
+Database
+PostgreSQL 15
+Users, sessions, practice history, verse metadata
+Cache
+Redis 7
+Verse text cache, session store, rate limiting
+Reference Audio
+EveryAyah.com CDN
+Sheikh recitation audio fetched per verse on demand
+
+5.3 Core Recitation Request Flow
+Step
+From
+To
+Action
+1
+User
+Vue Frontend
+Selects Surah and Ayah from dropdown
+2
+Vue Frontend
+FastAPI /verses
+GET request for verse text and metadata
+3
+FastAPI
+Redis or DB
+Fetch cached or database verse text
+4
+FastAPI
+Vue Frontend
+Return Arabic text and English translation
+5
+User
+Vue Frontend
+Clicks Record, speaks recitation into mic
+6
+Vue Frontend
+Web Audio API
+Captures microphone stream as WebM blob
+7
+Vue Frontend
+FastAPI /recitations
+POST multipart: audio file plus surah and ayah IDs
+8
+FastAPI
+Whisper
+Send audio file for Arabic transcription
+9
+FastAPI
+Diff Engine
+Compare Whisper output vs correct verse text
+10
+FastAPI
+Claude API
+Send diff and context for feedback generation
+11
+FastAPI
+PostgreSQL
+Persist session: score, transcript, timestamp
+12
+FastAPI
+Vue Frontend
+Return transcription, diff, score, and feedback
+13
+Vue Frontend
+EveryAyah CDN
+Fetch and load reference audio for verse
+14
+Vue Frontend
+User
+Display feedback and auto-play reference audio
+6. Data Model
+
+The database consists of 4 core tables. All timestamps are stored as UTC. UUIDs are auto-generated.
+
+Table: users
+Column
+Type
+Constraints
+Description
+id
+UUID
+PRIMARY KEY
+Auto-generated unique identifier
+email
+VARCHAR(255)
+UNIQUE, NOT NULL
+User login email address
+password_hash
+VARCHAR(255)
+NOT NULL
+bcrypt hashed password
+display_name
+VARCHAR(100)
+NOT NULL
+Name shown in the UI
+created_at
+TIMESTAMP
+NOT NULL
+Account creation timestamp UTC
+preferred_sheikh_id
+INTEGER
+FK -> shuyookh
+Default sheikh for reference audio
+
+Table: surahs
+Column
+Type
+Constraints
+Description
+id
+INTEGER
+PRIMARY KEY
+Surah number 1 to 114
+name_arabic
+VARCHAR(100)
+NOT NULL
+Arabic script name
+name_english
+VARCHAR(100)
+NOT NULL
+English transliterated name
+ayah_count
+INTEGER
+NOT NULL
+Total verses in this surah
+revelation_type
+VARCHAR(10)
+NOT NULL
+Meccan or Medinan
+
+Table: verses
+Column
+Type
+Constraints
+Description
+id
+INTEGER
+PRIMARY KEY
+Auto-increment
+surah_id
+INTEGER
+FK -> surahs
+Parent surah reference
+ayah_number
+INTEGER
+NOT NULL
+Verse number within the surah
+text_arabic
+TEXT
+NOT NULL
+Uthmani script Arabic text with harakat
+text_english
+TEXT
+NOT NULL
+English translation
+page_number
+INTEGER
+NULLABLE
+Mushaf page reference
+
+Table: recitation_sessions
+Column
+Type
+Constraints
+Description
+id
+UUID
+PRIMARY KEY
+Unique session identifier
+user_id
+UUID
+FK -> users
+Owning user reference
+verse_id
+INTEGER
+FK -> verses
+Verse practiced in this session
+transcription
+TEXT
+NULLABLE
+What Whisper heard from the user
+accuracy_score
+FLOAT
+NOT NULL
+0.0 to 1.0 word match ratio
+feedback_text
+TEXT
+NULLABLE
+LLM-generated feedback string
+diff_json
+JSONB
+NULLABLE
+Word-level diff array of word and status pairs
+duration_seconds
+FLOAT
+NULLABLE
+Length of the user recording in seconds
+created_at
+TIMESTAMP
+NOT NULL
+Session timestamp UTC
+7. API Specification
+
+All endpoints are prefixed with /api/v1. Authentication uses Bearer JWT tokens in the Authorization header, except for the auth endpoints listed below.
+
+7.1 Authentication Endpoints
+Method
+Endpoint
+Request Body
+Response
+POST
+/auth/register
+{ email, password, display_name }
+201: { user_id, token }  |  409: email taken
+POST
+/auth/login
+{ email, password }
+200: { access_token, refresh_token }  |  401: invalid credentials
+POST
+/auth/refresh
+{ refresh_token }
+200: { access_token }  |  401: token expired
+
+7.2 Verse Endpoints
+Method
+Endpoint
+Parameters
+Response
+GET
+/surahs
+None
+200: [{ id, name_arabic, name_english, ayah_count }]
+GET
+/surahs/{id}/verses
+surah_id in path
+200: [{ id, ayah_number, text_arabic, text_english }]
+GET
+/verses/{id}
+verse_id in path
+200: full verse object  |  404: not found
+
+7.3 Recitation Endpoints
+Method
+Endpoint
+Body or Params
+Response
+POST
+/recitations
+multipart: audio_file, verse_id
+200: { transcription, score, diff, feedback }  |  422: bad audio
+GET
+/recitations
+query: page, limit, verse_id
+200: paginated list of session objects
+GET
+/recitations/{id}
+session_id in path
+200: full session object  |  404: not found
+
+Sample Response — POST /recitations (200 OK)
+  {
+    "session_id": "3f8a9d-...",
+    "transcription": "bism allah alrahman alrahim",
+    "expected": "bismillahi alrrahmani alrraheemi",
+    "accuracy_score": 0.87,
+    "diff": [
+      { "word": "bism allah", "status": "correct" },
+      { "word": "alrahman",   "status": "incorrect", "expected": "alrrahmani" }
+    ],
+    "feedback": "Your Bismillah opening was clear and well-paced. The letter R in
+                 Al-Rahman needs heavier emphasis — it is a heavy letter (ra mushaddada).
+                 Try holding it slightly longer before continuing.",
+    "duration_seconds": 4.2
+  }
+8. Project Structure
+
+8.1 Frontend (Vue.js)
+Directory Layout — /frontend/src/
+  components/
+    VerseSelector.vue       Surah and Ayah dropdown with search
+    AudioRecorder.vue       Mic recording with live waveform visualization
+    FeedbackCard.vue        Word diff display and LLM feedback text
+    ReferencePlayer.vue     Sheikh audio player with speed controls
+    ProgressChart.vue       Accuracy over time using recharts
+  views/
+    HomeView.vue            Main practice screen — the core loop
+    HistoryView.vue         Past practice sessions list
+    ProfileView.vue         User settings and sheikh preference
+    AuthView.vue            Login and registration forms
+  stores/
+    auth.js                 Pinia: JWT token, user state, login and logout
+    practice.js             Pinia: current session state and recording blob
+    verses.js               Pinia: cached surah and verse data
+  composables/
+    useAudioRecorder.js     Web Audio API logic: start, stop, replay
+    useRecitationAPI.js     Axios API calls with Authorization headers
+  router/index.js           Vue Router route definitions and auth guards
+  main.js                   App entry point and plugin registration
+
+8.2 Backend (Python FastAPI)
+Directory Layout — /backend/
+  app/
+    api/routes/
+      auth.py               Register, login, refresh endpoints
+      verses.py             Surah list and verse detail endpoints
+      recitations.py        Audio upload and processing pipeline endpoint
+    core/
+      config.py             Settings loaded from environment variables
+      security.py           JWT creation and validation helpers
+      database.py           SQLAlchemy async engine and session factory
+    models/
+      user.py               SQLAlchemy User ORM model
+      verse.py              Surah and Verse ORM models
+      session.py            RecitationSession ORM model
+    services/
+      whisper_service.py    Whisper STT wrapper and audio preprocessing
+      diff_service.py       Text comparison, scoring, diff JSON builder
+      feedback_service.py   Claude API call with prompt construction
+      audio_service.py      File saving, format conversion, cleanup
+    main.py                 FastAPI app, CORS, middleware, router mounting
+  alembic/                  Database migration files
+  requirements.txt          Python dependencies
+  Dockerfile                Container image definition
+  docker-compose.yml        Local dev stack: API, DB, Redis
+9. Technology Stack Decisions
+
+Layer
+Choice
+Rationale
+Alternatives
+Frontend
+Vue 3 + Vite
+Developer specialization; Composition API suits audio state
+React, Svelte
+CSS
+Tailwind CSS
+Rapid UI development; utility classes match component workflow
+Vuetify, PrimeVue
+State
+Pinia
+Official Vue 3 recommendation; simpler than Vuex
+Vuex 4
+Backend
+FastAPI
+Async-native Python; auto OpenAPI docs; high performance
+Django REST, Flask
+STT
+Whisper large-v3
+Best open-source Arabic ASR; runs locally or via API
+Google STT, Azure
+LLM Feedback
+Claude Sonnet
+Strong Arabic understanding; nuanced feedback generation
+GPT-4o, Gemini
+Database
+PostgreSQL
+Robust relational DB; JSONB support for diff storage
+MySQL, SQLite
+ORM
+SQLAlchemy + Alembic
+Industry standard Python ORM with migration support
+Tortoise ORM
+Cache
+Redis
+Verse caching, rate limiting, session store
+Memcached
+Reference Audio
+EveryAyah.com
+Free verse-level CDN; multiple shuyookh; no API key needed
+Quran.com API
+Auth
+JWT via python-jose
+Stateless auth works well with PWA; industry standard
+Session-based
+Deployment
+Docker Compose
+Reproducible dev and production environment
+Manual venv
+10. Development Roadmap
+
+Phase 1 — Foundation (Weeks 1-2)
+Sprint Goals
+  Project scaffolding: Vue 3 + Vite frontend, FastAPI backend, Docker Compose setup
+  PostgreSQL setup with Alembic migrations for all four tables
+  Seed database with all 114 surahs and verse text from Quran.com API
+  JWT authentication endpoints: register, login, refresh token
+  Static verse display: Surah selector to Ayah selector to Arabic text renders on screen
+
+Phase 2 — Core Loop (Weeks 3-4)
+Sprint Goals
+  AudioRecorder Vue component using Web Audio API
+  FastAPI endpoint accepting audio file via multipart upload
+  Whisper integration: transcribe uploaded Arabic audio with language=ar parameter
+  Diff engine: compare transcription to expected verse text and compute accuracy score
+  Return results to frontend and display basic word-level feedback to user
+
+Phase 3 — Intelligence & Polish (Weeks 5-6)
+Sprint Goals
+  Claude API integration for human-readable error explanation in feedback
+  EveryAyah reference audio player component with speed controls
+  Word-level diff UI: green for correct, red for incorrect, gray for missing words
+  Progress tracking: persist sessions to DB and render history view
+  PWA manifest and service worker for mobile installability
+
+Phase 4 — MVP Launch (Weeks 7-8)
+Sprint Goals
+  End-to-end testing of the full record, transcribe, feedback, and audio loop
+  Performance optimization: caching and response time target under 8 seconds
+  UI polish: loading states, error handling, full mobile responsiveness
+  Deployment: backend on Railway or Render, frontend on Vercel
+  Beta testing with 5 to 10 real users; collect and prioritize feedback
+
+Post-MVP Backlog
+Feature
+Complexity
+Impact
+Full tajweed rule engine: ghunna, madd, idghaam detection
+Very High
+Very High
+Real-time streaming feedback during recitation
+High
+Very High
+Multiple sheikh audio options
+Low
+Medium
+Arabic and Urdu UI language support
+Medium
+High
+Spaced repetition review scheduling system
+Medium
+High
+Freemium subscription monetization
+Medium
+High
+Institution and madrasa multi-tenant dashboard
+Very High
+Very High
+11. Risk Register
+
+Risk
+Likelihood
+Impact
+Mitigation Strategy
+Whisper accuracy on Quranic Arabic is insufficient
+Medium
+High
+Test large-v3 early with sample recordings; fall back to verified transcription pairs
+EveryAyah CDN goes down or restricts access
+Low
+Medium
+Mirror audio for first 30 surahs locally; keep Quran.com API as fallback
+LLM API costs exceed budget at scale
+Medium
+Medium
+Cache feedback for identical transcription and verse pairs; enforce per-user rate limits
+Mobile browser mic permissions are inconsistent
+Medium
+High
+Test iOS Safari early; document known issues; provide file upload as fallback
+Theological sensitivity around AI on Quranic content
+Low
+High
+Frame as pronunciation tool only, not religious authority; add scholar disclaimer
+Scope creep delays MVP delivery
+High
+Medium
+Enforce MVP scope strictly; log all new ideas to backlog only; weekly scope review
+
+12. External Resources
+
+Resource
+URL
+Usage in Project
+EveryAyah Audio CDN
+everyayah.com
+Audio format: /audio/{sheikh_code}/{surah:3d}{ayah:3d}.mp3
+Quran.com API
+api.qurancdn.com/api/qdc
+Verse text in Uthmani script, translations, verse metadata
+OpenAI Whisper API
+api.openai.com/v1/audio
+Speech-to-text with language=ar parameter
+Anthropic Claude API
+api.anthropic.com/v1
+Feedback LLM: claude-sonnet-4-20250514 model
+Amiri Arabic Font
+fonts.googleapis.com
+Uthmani script rendering in browser with RTL support
+python-levenshtein
+pip install python-levenshtein
+Fast edit-distance computation for the diff engine
