@@ -1,0 +1,33 @@
+
+services:
+  api:
+    build: .
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://user:password@db:5432/tajweed_coach
+      - REDIS_URL=redis://cache:6379/0
+    depends_on:
+      - db
+      - cache
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=tajweed_coach
+    ports:
+      - "5433:5432"
+
+  cache:
+    image: redis:7
+    ports:
+      - "6380:6379"
+
+volumes:
+  postgres_data:
