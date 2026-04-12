@@ -9,6 +9,8 @@ services:
     environment:
       - DATABASE_URL=postgresql+asyncpg://user:password@db:5432/tajweed_coach
       - REDIS_URL=redis://cache:6379/0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - db
       - cache
