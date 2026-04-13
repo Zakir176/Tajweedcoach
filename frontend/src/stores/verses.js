@@ -32,6 +32,7 @@ export const useVerseStore = defineStore('verses', {
       try {
         const response = await axios.get(`/api/v1/surahs/${surahId}/verses`)
         this.verses = response.data
+        console.log('Verses from API:', response.data)
       } catch (err) {
         this.error = 'Failed to fetch verses'
         console.error(err)

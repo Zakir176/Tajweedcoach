@@ -22,6 +22,7 @@ watch(selectedSurahId, (newId) => {
 watch(selectedVerseId, (newId) => {
     if (!newId) return
     const verse = store.verses.find(v => v.id === parseInt(newId))
+    console.log('Selected verse object:', verse)
     store.setVerse(verse)
 })
 
