@@ -13,6 +13,7 @@
       <div class="space-y-6">
         <AudioRecorder @success="handleRecordingSuccess" />
         <FeedbackCard v-if="currentFeedback" :feedback="currentFeedback" />
+        <ReferencePlayer />
       </div>
     </div>
   </div>
@@ -23,6 +24,7 @@ import { ref } from 'vue'
 import VerseSelector from '../components/VerseSelector.vue'
 import AudioRecorder from '../components/AudioRecorder.vue'
 import FeedbackCard from '../components/FeedbackCard.vue'
+import ReferencePlayer from '../components/ReferencePlayer.vue'
 
 const currentFeedback = ref(null)
 
