@@ -9,18 +9,19 @@ onMounted(() => {
 })
 
 const selectedSurahId = ref(null)
-const selectedAyahNumber = ref(null)
+const selectedVerseId = ref(null)
 
 // When surah changes, reset ayah and notify store
 watch(selectedSurahId, (newId) => {
-    selectedAyahNumber.value = null
+    selectedVerseId.value = null
     const surah = store.surahs.find(s => s.id === parseInt(newId))
     store.setSurah(surah)
 })
 
 // When ayah changes, notify store
-watch(selectedAyahNumber, (newAyah) => {
-    const verse = store.verses.find(v => v.ayah_number === parseInt(newAyah))
+watch(selectedVerseId, (newId) => {
+    if (!newId) return
+    const verse = store.verses.find(v => v.id === parseInt(newId))
     store.setVerse(verse)
 })
 
@@ -61,11 +62,11 @@ const verseOptions = computed(() => store.verses)
         <div class="relative group">
           <select 
             id="ayah-select"
-            v-model="selectedAyahNumber"
+            v-model="selectedVerseId"
             class="block w-full px-4 py-3 text-gray-700 bg-white border border-indigo-100 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all appearance-none"
           >
             <option :value="null" disabled>Select Ayah</option>
-            <option v-for="verse in verseOptions" :key="verse.id" :value="verse.ayah_number">
+            <option v-for="verse in verseOptions" :key="verse.id" :value="verse.id">
               Ayah {{ verse.ayah_number }}
             </option>
           </select>
