@@ -117,6 +117,7 @@ const submitRecitation = async () => {
   
   const formData = new FormData()
   formData.append('audio_file', audioBlob.value, 'recitation.webm')
+  console.log('Sending verse_id:', verseStore.selectedVerse.id)
   formData.append('verse_id', verseStore.selectedVerse.id)
   
   try {
