@@ -6,7 +6,7 @@
         AI Analysis
       </h3>
       <div class="flex flex-col items-end">
-        <span class="text-3xl font-black text-cyan-400">{{ Math.round(feedback.accuracy_score * 100) }}%</span>
+        <span class="text-3xl font-black text-cyan-400">{{ (feedback.accuracy_score * 100).toFixed(1) }}%</span>
         <span class="text-[10px] uppercase tracking-widest text-white/40 font-bold">Accuracy Score</span>
       </div>
     </div>
