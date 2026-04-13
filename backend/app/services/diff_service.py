@@ -5,15 +5,15 @@ def strip_diacritics(text: str) -> str:
     """
     Remove all Arabic diacritics (harakat) for comparison.
     """
-    # Pattern includes fatba, damma, kasra, sukun, shadda, etc.
-    return re.sub(r'[\u0610-\u061A\u064B-\u065F\u0670]', '', text)
+    # Pattern includes Arabic signs (U+0600-U+060F), fatha, damma, kasra, sukun, shadda, tatweel (U+0640), superscript alef (U+0670)
+    return re.sub(r'[\u0600-\u060F\u0610-\u061A\u0640\u064B-\u065F\u0670]', '', text)
 
 def normalize_arabic(text: str) -> str:
     """
     Normalize Arabic character variants for robust comparison.
     """
-    # Replace alif variants with plain alif
-    text = re.sub(r'[أإآ]', 'ا', text)
+    # Replace alif variants with plain alif (included ٱ U+0671)
+    text = re.sub(r'[أإآٱ]', 'ا', text)
     # Replace tey marbuta with heh
     text = re.sub(r'ة', 'ه', text)
     # Replace alef maksura with yeh
