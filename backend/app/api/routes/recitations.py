@@ -42,6 +42,10 @@ async def upload_recitation(
             transcription
         )
         
+        print(f"Whisper transcription: {transcription}")
+        print(f"Expected text: {verse.text_arabic}")
+        print(f"Accuracy score: {accuracy}")
+        
         # 5. Generate warm feedback via local Ollama
         feedback = await feedback_service.generate_feedback(transcription, verse.text_arabic, diff_results)
         
