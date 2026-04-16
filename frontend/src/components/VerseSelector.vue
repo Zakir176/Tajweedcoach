@@ -1,11 +1,11 @@
 <script setup>
 import { onMounted, computed, ref, watch } from 'vue'
-import { useVerseStore } from '../stores/verses'
+import { useVerseStore } from '@/stores/verses'
 
-const store = useVerseStore()
+const versesStore = useVerseStore()
 
 onMounted(() => {
-  store.fetchSurahs()
+  versesStore.fetchSurahs()
 })
 
 const selectedSurahId = ref(null)
@@ -14,20 +14,20 @@ const selectedVerseId = ref(null)
 // When surah changes, reset ayah and notify store
 watch(selectedSurahId, (newId) => {
     selectedVerseId.value = null
-    const surah = store.surahs.find(s => s.id === parseInt(newId))
-    store.setSurah(surah)
+    const surah = versesStore.surahs.find(s => s.id === parseInt(newId))
+    versesStore.setSurah(surah)
 })
 
 // When ayah changes, notify store
 watch(selectedVerseId, (newId) => {
     if (!newId) return
-    const verse = store.verses.find(v => v.id === parseInt(newId))
+    const verse = versesStore.verses.find(v => v.id === parseInt(newId))
     console.log('Selected verse object:', verse)
-    store.setVerse(verse)
+    versesStore.setVerse(verse)
 })
 
-const surahOptions = computed(() => store.surahs)
-const verseOptions = computed(() => store.verses)
+const surahOptions = computed(() => versesStore.surahs)
+const verseOptions = computed(() => versesStore.verses)
 </script>
 
 <template>
@@ -58,7 +58,7 @@ const verseOptions = computed(() => store.verses)
       </div>
 
       <!-- Ayah Dropdown -->
-      <div class="space-y-2 transition-all duration-500" :class="{ 'opacity-100 translate-y-0': store.selectedSurah, 'opacity-0 translate-y-2 pointer-events-none': !store.selectedSurah }">
+      <div class="space-y-2 transition-all duration-500" :class="{ 'opacity-100 translate-y-0': versesStore.selectedSurah, 'opacity-0 translate-y-2 pointer-events-none': !versesStore.selectedSurah }">
         <label for="ayah-select" class="block text-sm font-medium text-indigo-900/70 ml-1">Ayah</label>
         <div class="relative group">
           <select 
@@ -81,16 +81,16 @@ const verseOptions = computed(() => store.verses)
     </div>
 
     <!-- Loading State -->
-    <div v-if="store.loading" class="flex justify-center py-12">
+    <div v-if="versesStore.loading" class="flex justify-center py-12">
       <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
     </div>
 
     <!-- Results Display -->
-    <div v-else-if="store.selectedVerse" class="space-y-6 pt-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div v-else-if="versesStore.selectedVerse" class="space-y-6 pt-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div class="text-center space-y-8">
         <!-- Arabic Text -->
         <h2 class="font-serif text-5xl md:text-6xl leading-[1.6] text-gray-900 dir-rtl px-4 py-8 bg-indigo-50/30 rounded-3xl border border-indigo-100/50 shadow-inner overflow-x-auto whitespace-normal">
-          {{ store.selectedVerse.text_arabic }}
+          {{ versesStore.selectedVerse.text_arabic }}
         </h2>
         
         <!-- English Translation -->
@@ -98,11 +98,11 @@ const verseOptions = computed(() => store.verses)
             <div class="p-4 rounded-xl border border-indigo-50 bg-white/80 shadow-sm relative group overflow-hidden">
                 <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-indigo-500/5 to-indigo-500/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                 <p class="text-lg text-gray-600 italic relative z-10 leading-relaxed">
-                    "{{ store.selectedVerse.text_english }}"
+                    "{{ versesStore.selectedVerse.text_english }}"
                 </p>
                 <div class="mt-4 flex justify-center">
                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700 uppercase tracking-widest border border-indigo-200">
-                        {{ store.selectedSurah.name_english }} : {{ store.selectedVerse.ayah_number }}
+                        {{ versesStore.selectedSurah.name_english }} : {{ versesStore.selectedVerse.ayah_number }}
                     </span>
                 </div>
             </div>
@@ -111,7 +111,7 @@ const verseOptions = computed(() => store.verses)
     </div>
 
     <!-- Empty State -->
-    <div v-else-if="!store.loading" class="text-center py-20 opacity-30 select-none">
+    <div v-else-if="!versesStore.loading" class="text-center py-20 opacity-30 select-none">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>

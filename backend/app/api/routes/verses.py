@@ -21,6 +21,7 @@ class SurahResponse(BaseModel):
 
 class VerseResponse(BaseModel):
     id: int
+    surah_id: int
     ayah_number: int
     text_arabic: str
     text_english: str
