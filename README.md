@@ -1,84 +1,138 @@
 # Tajweed Recitation Coach 🎙️📖
 
-An AI-powered web application designed to help self-teaching Muslims improve their Quran recitation. The app provides a full feedback loop: users record their recitation of a specific verse, and our on-device, localized AI engine provides transcription, an expected diff, and detailed pronunciation guidance—finished off with reference audio from world-renowned shuyookh.
+[![Local-Only](https://img.shields.io/badge/deployment-local-brightgreen)](#)
+[![License](https://img.shields.io/badge/license-MIT-blue)](#)
+
+An open-source, privacy-first web app to help learners improve Quran recitation. Record a verse in-browser, get a local transcription and a pronunciation-focused feedback report, then listen to reference recitations.
 
 ## Table of Contents
-- [Features](#features)
-- [Architecture & Tech Stack](#architecture--tech-stack)
-- [Getting Started](#getting-started)
-- [Project Documentation](#project-documentation)
+- Features
+- Quickstart
+- Architecture & Tech Stack
+- Detailed Setup
+- Usage Examples
+- Contributing
+- Troubleshooting
+- Project Documentation
 
 ---
 
 ## Features
-
-- **Verse Selection**: Explore and practice any verse from the 114 Surahs.
-- **In-Browser Recording**: Native audio capture through the browser's Web Audio API. 
-- **Local AI Analysis**: Audio is processed privately and securely. We use Faster-Whisper to transcribe Arabic speech, and evaluate it locally against a known Quranic dictionary.
-- **Actionable Feedback**: Ollama generates dynamic, localized feedback breaking down your recitation's mistakes or successes.
-- **Reference Player**: Instantly play the professionally recorded recitation for your exact verse by renowned reciters (Husary and Sudais) seamlessly streaming from EveryAyah's CDN.
-
-## Architecture & Tech Stack
-
-This project was intentionally pivoted from a cloud-based architecture to a **100% localized stack** to enforce privacy and minimize recurring API costs.
-
-### Frontend
-- **Framework**: Vue 3 (Composition API) + Vite
-- **Styling**: Tailwind CSS
-- **State Management**: Pinia
-
-### Backend
-- **Framework**: Python FastAPI
-- **Database**: PostgreSQL (Relational persistence) + Redis (In-memory caching)
-- **AI/ML Layer**:
-  - **Speech-to-Text**: [Faster-Whisper](https://github.com/SYSTRAN/faster-whisper) (Robust local offline model for Arabic audio)
-  - **Feedback LLM**: [Ollama](https://ollama.com/) (For generating natural, privacy-first user feedback)
+- Select any verse from the 114 Surahs and practice.
+- Record audio in-browser using the Web Audio API.
+- Local speech-to-text (Faster-Whisper) for private transcription.
+- Local LLM feedback (Ollama) for pronunciation guidance.
+- Reference audio player streaming from EveryAyah's CDN.
 
 ---
 
-## Getting Started
+## Quickstart (recommended)
+1. Start backend services:
 
-Follow these instructions to run the Tajweed Coach environment locally.
+   cd backend
+   docker compose up -d
 
+2. Start frontend:
+
+   cd frontend
+   npm install
+   npm run dev
+
+Visit the Vite URL (usually http://localhost:5173) and the backend at http://localhost:8000.
+
+---
+
+## Architecture & Tech Stack
+- Frontend: Vue 3 (Composition API), Vite, Tailwind CSS, Pinia
+- Backend: FastAPI (Python)
+- Persistence: PostgreSQL, Redis (cache)
+- Local ML: Faster-Whisper (speech-to-text), Ollama (LLM for feedback)
+
+This repo is designed for fully-local inference to preserve user privacy and reduce runtime costs.
+
+---
+
+## Detailed Setup
 ### Prerequisites
-- [Docker & Docker Compose](https://www.docker.com/) installed
-- [Node.js](https://nodejs.org/) (v18+)
-- [Ollama](https://ollama.com/) installed on your host machine to run local language models.
+- Docker & Docker Compose
+- Node.js v18+
+- Python 3.10+ (for local development in the backend)
+- Ollama installed on the host (for the LLM feedback service)
 
-### Step 1: Clone and Infrastructure Setup
+### Backend (local dev)
+1. From the repository root:
 
-Boot the backend environment comprising FastAPI, PostgreSQL, and Redis:
-```bash
-cd backend
-docker compose up -d
-```
-*(Note: The backend API runs on `http://localhost:8000`)*
+   cd backend
+   docker compose up -d
 
-### Step 2: Set Up Ollama
+2. (Optional) For working directly with the Python environment instead of Docker:
 
-If you haven't already, install Ollama and pull your desired language model that will generate the recitation feedback.
-For example, to pull Llama 3:
-```bash
-ollama run llama3
-```
-Ensure Ollama's HTTP server is running so the FastAPI backend can communicate with it to fetch human-readable suggestions.
+   python -m venv .venv
+   .\.venv\Scripts\Activate.ps1    # PowerShell
+   pip install -r requirements.txt
+   uvicorn app.main:app --reload
 
-### Step 3: Start the Frontend
+3. Environment variables
+Create a .env in backend/ (see backend/.env.example if present) with values such as:
 
-In a separate terminal tab, initialize the Vue application:
-```bash
-cd frontend
-npm install
-npm run dev
-```
-*(The frontend runs on `http://localhost:5173` locally)*
+   DATABASE_URL=postgresql://user:password@localhost:5432/tajweed
+   REDIS_URL=redis://localhost:6379
+   OLLAMA_BASE_URL=http://localhost:11434    # adjust if Ollama listens elsewhere
 
-You can now visit the URL provided by Vite and start practicing!
+### Ollama
+Install Ollama from https://ollama.com/. Start or run a model; one common command pattern is:
+
+   ollama run <model-name>
+
+Confirm Ollama is reachable at the OLLAMA_BASE_URL above before starting the app.
+
+### Frontend
+
+   cd frontend
+   npm install
+   npm run dev
+
+Open the URL shown by Vite (default: http://localhost:5173).
+
+---
+
+## Usage Examples
+- Recording and feedback: Use the web UI to select a verse, record, and request feedback.
+- API (developer): See docs/API_REFERENCE.md for exact endpoints. Example (high-level):
+
+  POST /api/feedback  - multipart/form-data { audio: file, verse: "2:255" }
+
+If you want precise curl examples, confirm which endpoints to document and they will be added here.
+
+---
+
+## Contributing
+Contributions welcome. Please:
+1. Fork the repo and create a feature branch.
+2. Open a pull request with a clear description and tests where applicable.
+3. Follow code style in existing files.
+
+See CONTRIBUTING.md (in /docs or add one) for full instructions.
+
+---
+
+## Troubleshooting
+- Backend not reachable: ensure `docker compose ps` shows postgres, redis, and backend containers running.
+- Ollama errors: confirm the model is running and OLLAMA_BASE_URL is correct.
+- Frontend build errors: delete node_modules and reinstall with `npm ci`.
 
 ---
 
 ## Project Documentation
+- docs/SYSTEM_ARCHITECTURE.md
+- docs/API_REFERENCE.md
+- docs/DEVELOPMENT_GUIDE.md
 
-For deeper dives into how this software is orchestrated, kindly review the following manuals located in the `/docs` directory:
-- 🧩 **[System Architecture](docs/SYSTEM_ARCHITECTURE.md)** (Detailed data modeling and logic loops)
-- 🔌 **[API Reference](docs/API_REFERENCE.md)** (Contracts for the FastAPI Python Endpoints)
+---
+
+## License
+MIT — see LICENSE file.
+
+---
+
+If this README should include concrete curl examples, screenshots, or CI badges, confirm which endpoints and assets to include and they will be added.
