@@ -19,8 +19,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
+        "https://tajweedcoach.vercel.app",
         "https://*.vercel.app",
-        "https://tajweedcoach-production.up.railway.app"
     ],
     allow_credentials=True,
     allow_methods=["*"],
