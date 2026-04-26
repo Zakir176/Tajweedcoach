@@ -29,6 +29,8 @@ class VerseResponse(BaseModel):
     class Config:
         from_attributes = True
 
+from app.services.quran_service import seed_quran_data
+
 @router.get("/surahs", response_model=List[SurahResponse])
 async def get_surahs(db: AsyncSession = Depends(get_db)):
     """Fetch all 114 surahs ordered by ID."""
@@ -45,3 +47,13 @@ async def get_verses(surah_id: int, db: AsyncSession = Depends(get_db)):
     if not verses:
         raise HTTPException(status_code=404, detail="Surah not found or has no verses")
     return verses
+
+@router.post("/admin/seed")
+async def seed_database(db: AsyncSession = Depends(get_db)):
+    """One-time seeding endpoint for production database."""
+    surahs, verses = await seed_quran_data(db)
+    return {
+        "status": "done",
+        "surahs": surahs,
+        "verses": verses
+    }
