@@ -17,6 +17,24 @@ Desktop.ini
 # IDE - JetBrains (IntelliJ, WebStorm, PyCharm, etc.)
 .idea/
 
+# Backend
+backend/__pycache__/
+backend/*.pyc
+backend/.env
+backend/.env.*
+backend/*.egg-info/
+backend/dist/
+backend/.pytest_cache/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.*
+
+# Docker
+postgres_data/
+
 # Logs and databases
 *.log
 *.sqlite
@@ -29,14 +47,3 @@ temp/
 *.bak
 *.swp
 *~
-
-# Local environment files
-.env
-.env.local
-.env.*.local
-
-# Node (Root level dependencies if any)
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
