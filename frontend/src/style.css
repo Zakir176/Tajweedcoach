@@ -19,6 +19,23 @@ body {
   direction: rtl;
 }
 
+/* Custom UI Utilities */
+.card-hover {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.card-hover:hover {
+  @apply -translate-y-0.5 shadow-xl;
+}
+
+.clean-input {
+  @apply border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none;
+}
+
+::placeholder {
+  @apply text-gray-400 font-normal;
+}
+
 /* Custom scrollbar for a premium feel */
 ::-webkit-scrollbar {
   width: 8px;
