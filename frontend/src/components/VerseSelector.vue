@@ -31,7 +31,7 @@ const verseOptions = computed(() => versesStore.verses)
 </script>
 
 <template>
-  <div class="max-w-4xl mx-auto p-8 space-y-8 bg-white rounded-2xl shadow-sm border border-gray-100 card-hover">
+  <div class="w-full p-8 space-y-8 rounded-2xl shadow-lg border border-gray-100 card-hover" style="background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%)">
     
     <!-- Selectors Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -42,7 +42,7 @@ const verseOptions = computed(() => versesStore.verses)
           <select 
             id="surah-select"
             v-model="selectedSurahId"
-            class="block w-full px-4 py-3 text-gray-700 bg-gray-50/50 clean-input rounded-xl appearance-none"
+            class="block w-full px-4 py-3 text-gray-700 bg-white border border-gray-200 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-400/10 rounded-xl appearance-none outline-none transition-all"
           >
             <option :value="null" disabled>Select a Surah</option>
             <option v-for="surah in surahOptions" :key="surah.id" :value="surah.id">
@@ -64,7 +64,7 @@ const verseOptions = computed(() => versesStore.verses)
           <select 
             id="ayah-select"
             v-model="selectedVerseId"
-            class="block w-full px-4 py-3 text-gray-700 bg-gray-50/50 clean-input rounded-xl appearance-none"
+            class="block w-full px-4 py-3 text-gray-700 bg-white border border-gray-200 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-400/10 rounded-xl appearance-none outline-none transition-all"
           >
             <option :value="null" disabled>Select Ayah</option>
             <option v-for="verse in verseOptions" :key="verse.id" :value="verse.id">
@@ -111,11 +111,11 @@ const verseOptions = computed(() => versesStore.verses)
     </div>
 
     <!-- Empty State -->
-    <div v-else-if="!versesStore.loading" class="text-center py-20 opacity-30 select-none">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div v-else-if="!versesStore.loading" class="text-center py-24 px-6 bg-indigo-50/50 rounded-2xl border border-indigo-50 border-dashed select-none mt-8">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 mx-auto mb-6 text-indigo-400 opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
         </svg>
-        <p class="text-xl font-medium">Search for a verse to begin</p>
+        <p class="text-xl font-medium text-indigo-900/60">Search for a verse to begin</p>
     </div>
   </div>
 </template>
