@@ -1,8 +1,8 @@
 <template>
   <div class="home-view max-w-4xl mx-auto p-6">
-    <header class="mb-8 text-center">
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">Tajweed Recitation Coach</h1>
-      <p class="text-gray-600">Improve your Quran recitation with AI feedback</p>
+    <header class="mb-12 text-center">
+      <h1 class="text-4xl md:text-5xl font-black text-indigo-950 mb-4 tracking-tight">Tajweed Recitation Coach</h1>
+      <p class="text-lg text-gray-400 font-medium max-w-lg mx-auto">Master your Quran recitation with precise AI-powered feedback</p>
     </header>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
