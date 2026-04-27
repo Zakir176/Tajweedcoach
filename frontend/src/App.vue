@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col">
-    <nav class="bg-white border-b shadow-sm">
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
       <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <router-link to="/" class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
           TajweedCoach
@@ -18,7 +18,7 @@
       <router-view />
     </main>
 
-    <footer class="bg-white border-t py-6 text-center text-gray-500 text-sm">
+    <footer class="bg-white py-10 text-center text-gray-400 text-sm">
       &copy; 2026 Tajweed Recitation Coach. Built with Vue 3 and FastAPI.
     </footer>
   </div>

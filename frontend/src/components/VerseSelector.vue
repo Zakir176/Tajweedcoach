@@ -31,7 +31,7 @@ const verseOptions = computed(() => versesStore.verses)
 </script>
 
 <template>
-  <div class="max-w-4xl mx-auto p-6 space-y-8 bg-white/50 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl transition-all duration-300">
+  <div class="max-w-4xl mx-auto p-8 space-y-8 bg-white rounded-2xl shadow-sm border border-gray-100 card-hover">
     
     <!-- Selectors Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -42,7 +42,7 @@ const verseOptions = computed(() => versesStore.verses)
           <select 
             id="surah-select"
             v-model="selectedSurahId"
-            class="block w-full px-4 py-3 text-gray-700 bg-white border border-indigo-100 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all appearance-none"
+            class="block w-full px-4 py-3 text-gray-700 bg-gray-50/50 clean-input rounded-xl appearance-none"
           >
             <option :value="null" disabled>Select a Surah</option>
             <option v-for="surah in surahOptions" :key="surah.id" :value="surah.id">
@@ -64,7 +64,7 @@ const verseOptions = computed(() => versesStore.verses)
           <select 
             id="ayah-select"
             v-model="selectedVerseId"
-            class="block w-full px-4 py-3 text-gray-700 bg-white border border-indigo-100 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all appearance-none"
+            class="block w-full px-4 py-3 text-gray-700 bg-gray-50/50 clean-input rounded-xl appearance-none"
           >
             <option :value="null" disabled>Select Ayah</option>
             <option v-for="verse in verseOptions" :key="verse.id" :value="verse.id">
@@ -89,7 +89,7 @@ const verseOptions = computed(() => versesStore.verses)
     <div v-else-if="versesStore.selectedVerse" class="space-y-6 pt-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div class="text-center space-y-8">
         <!-- Arabic Text -->
-        <h2 class="font-serif text-5xl md:text-6xl leading-[1.6] text-gray-900 dir-rtl px-4 py-8 bg-indigo-50/30 rounded-3xl border border-indigo-100/50 shadow-inner overflow-x-auto whitespace-normal">
+        <h2 class="font-serif text-5xl md:text-6xl leading-[1.6] text-indigo-950 dir-rtl px-6 py-10 bg-indigo-50/30 rounded-2xl border border-indigo-100/50 shadow-inner overflow-x-auto whitespace-normal">
           {{ versesStore.selectedVerse.text_arabic }}
         </h2>
         
