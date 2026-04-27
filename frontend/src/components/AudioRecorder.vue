@@ -150,8 +150,9 @@ onUnmounted(() => {
       <!-- Waveform Canvas -->
       <div class="relative h-24 mb-6 bg-black/20 rounded-xl overflow-hidden">
         <canvas ref="canvasRef" width="400" height="100" class="w-full h-full"></canvas>
-        <div v-if="!isRecording && !audioUrl" class="absolute inset-0 flex items-center justify-center text-gray-400 text-sm italic">
-          Ready to capture...
+        <div v-if="!isRecording && !audioUrl" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-80"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+          <span class="text-sm font-medium">Ready to capture your recitation</span>
         </div>
       </div>
 
@@ -161,10 +162,10 @@ onUnmounted(() => {
           <button
             v-if="!isRecording"
             @click="startRecording"
-            class="w-20 h-20 rounded-full bg-red-600 hover:bg-red-500 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-lg shadow-red-900/40"
+            class="w-20 h-20 rounded-full bg-red-600 hover:bg-red-500 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-lg shadow-red-900/40 text-white"
             :disabled="isLoading"
           >
-            <div class="w-8 h-8 rounded-full bg-white"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
           </button>
 
           <button
@@ -177,6 +178,8 @@ onUnmounted(() => {
         </div>
 
         <!-- Feedback & Error -->
+        <p v-if="!isRecording && !audioUrl" class="text-sm font-bold text-gray-400 uppercase tracking-widest mt-[-1rem]">Tap to Record</p>
+
         <p v-if="error" class="text-red-400 text-sm bg-red-900/20 px-4 py-2 rounded-lg border border-red-900/40">
           {{ error }}
         </p>

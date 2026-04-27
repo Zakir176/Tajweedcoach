@@ -20,7 +20,7 @@
 
       <!-- Selected Sheikh Name Display -->
       <div class="text-center py-4">
-        <p class="text-xs font-black tracking-widest text-indigo-400 uppercase mb-2">Reference Sheikh</p>
+        <p class="text-sm font-bold text-indigo-400 mb-2">Reference Sheikh</p>
         <p class="text-2xl font-black text-indigo-950">{{ selectedSheikhName }}</p>
       </div>
 
