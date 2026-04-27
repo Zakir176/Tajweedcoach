@@ -1,5 +1,5 @@
 <template>
-  <div v-if="versesStore.selectedVerse" class="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-indigo-100 shadow-xl mt-6 animate-in fade-in zoom-in duration-500">
+  <div v-if="versesStore.selectedVerse" class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm mt-8 card-hover animate-in fade-in zoom-in duration-500">
     <div class="flex flex-col gap-4">
       
       <!-- Header & Sheikh Selector -->
@@ -11,7 +11,7 @@
         
         <select 
           v-model="sheikhCode" 
-          class="bg-white text-gray-700 text-sm border border-indigo-200 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-indigo-500 outline-none appearance-none pr-8 cursor-pointer relative self-start sm:self-auto w-full sm:w-auto shadow-sm"
+          class="bg-gray-50/50 text-gray-700 text-sm clean-input rounded-xl px-4 py-2 appearance-none cursor-pointer relative self-start sm:self-auto w-full sm:w-auto shadow-sm"
           style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%234F46E5%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right .7rem top 50%; background-size: .65rem auto;"
         >
           <option v-for="sheikh in sheikhOptions" :key="sheikh.code" :value="sheikh.code">{{ sheikh.name }}</option>
@@ -19,9 +19,9 @@
       </div>
 
       <!-- Selected Sheikh Name Display -->
-      <div class="text-center py-2">
-        <p class="text-xs font-semibold tracking-wider text-indigo-400 uppercase mb-1">Now Playing</p>
-        <p class="text-xl font-bold text-gray-800">{{ selectedSheikhName }}</p>
+      <div class="text-center py-4">
+        <p class="text-xs font-black tracking-widest text-indigo-400 uppercase mb-2">Reference Sheikh</p>
+        <p class="text-2xl font-black text-indigo-950">{{ selectedSheikhName }}</p>
       </div>
 
       <!-- Audio Element (Hidden) -->
