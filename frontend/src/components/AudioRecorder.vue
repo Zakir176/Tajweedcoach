@@ -143,14 +143,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="canRecord" class="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-xl mt-8">
+  <div v-if="canRecord" class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm card-hover mt-8">
     <div class="text-center">
-      <h3 class="text-xl font-semibold mb-6 text-white">Record Recitation</h3>
+      <h3 class="text-xl font-bold mb-6 text-indigo-900">Record Recitation</h3>
 
       <!-- Waveform Canvas -->
       <div class="relative h-24 mb-6 bg-black/20 rounded-xl overflow-hidden">
         <canvas ref="canvasRef" width="400" height="100" class="w-full h-full"></canvas>
-        <div v-if="!isRecording && !audioUrl" class="absolute inset-0 flex items-center justify-center text-white/40 text-sm italic">
+        <div v-if="!isRecording && !audioUrl" class="absolute inset-0 flex items-center justify-center text-gray-400 text-sm italic">
           Ready to capture...
         </div>
       </div>
@@ -183,13 +183,13 @@ onUnmounted(() => {
 
         <!-- Preview & Submit -->
         <div v-if="audioUrl && !isRecording" class="w-full space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div class="flex items-center justify-center bg-white/5 rounded-xl p-4">
-            <audio :src="audioUrl" controls class="w-full h-10 filter invert grayscale opacity-80"></audio>
+          <div class="flex items-center justify-center bg-gray-50 rounded-xl p-4">
+            <audio :src="audioUrl" controls class="w-full h-10 opacity-80"></audio>
           </div>
           
           <button
             @click="submitRecitation"
-            class="w-full py-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-all shadow-lg shadow-cyan-900/40 flex items-center justify-center gap-2 group"
+            class="w-full py-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold transition-all shadow-md flex items-center justify-center gap-2 group"
             :disabled="isLoading"
           >
             <span v-if="!isLoading" class="flex items-center gap-2">
