@@ -14,7 +14,7 @@
       </div>
     </nav>
 
-    <main class="flex-grow">
+    <main class="min-h-[75vh] pb-8">
       <router-view />
     </main>
 

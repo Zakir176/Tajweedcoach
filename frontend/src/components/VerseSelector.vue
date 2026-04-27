@@ -49,7 +49,7 @@ const verseOptions = computed(() => versesStore.verses)
               {{ surah.id }}. {{ surah.name_english }} ({{ surah.ayah_count }} verses)
             </option>
           </select>
-          <div class="absolute right-4 top-1/2 -translate-y-1/2 p-1 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity">
+          <div class="absolute right-4 top-1/2 -translate-y-1/2 p-1 pointer-events-none opacity-60">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
@@ -71,7 +71,7 @@ const verseOptions = computed(() => versesStore.verses)
               Ayah {{ verse.ayah_number }}
             </option>
           </select>
-          <div class="absolute right-4 top-1/2 -translate-y-1/2 p-1 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity">
+          <div class="absolute right-4 top-1/2 -translate-y-1/2 p-1 pointer-events-none opacity-60">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
