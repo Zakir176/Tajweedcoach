@@ -1,16 +1,16 @@
 <template>
-  <div class="home-view max-w-4xl mx-auto p-6">
+  <div class="home-view max-w-7xl mx-auto p-6">
     <header class="mb-12 text-center">
       <h1 class="text-4xl md:text-5xl font-black text-indigo-950 mb-4 tracking-tight">Tajweed Recitation Coach</h1>
       <p class="text-lg text-gray-400 font-medium max-w-lg mx-auto">Master your Quran recitation with precise AI-powered feedback</p>
     </header>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="space-y-6">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
+      <div class="space-y-6 lg:col-span-3">
         <VerseSelector />
       </div>
 
-      <div class="space-y-6">
+      <div class="space-y-6 lg:col-span-2">
         <AudioRecorder @success="handleRecordingSuccess" />
         <FeedbackCard v-if="currentFeedback" :feedback="currentFeedback" />
         <ReferencePlayer />
