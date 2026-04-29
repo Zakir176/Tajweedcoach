@@ -34,7 +34,10 @@ async def upload_recitation(
             buffer.write(content)
             
         # 3. Transcribe using local Whisper
-        transcription = await whisper_service.transcribe(temp_filename)
+        transcription = await whisper_service.transcribe(
+            temp_filename, 
+            expected_text=verse.text_arabic
+        )
         
         # 4. Accurate Arabic comparison
         accuracy, diff_results = diff_service.compare_recitation(
