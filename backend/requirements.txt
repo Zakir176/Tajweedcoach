@@ -11,4 +11,4 @@ httpx
 redis
 python-levenshtein
 pydantic-settings
-faster-whisper
+groq

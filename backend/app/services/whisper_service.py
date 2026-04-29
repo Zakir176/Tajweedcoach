@@ -1,26 +1,15 @@
-from faster_whisper import WhisperModel
 import os
+from groq import Groq
 
-# Initialize the model globally to load it once
-# Using 'base' model for a balance between speed and accuracy
-# Quantization set to int8 for CPU efficiency
-model = WhisperModel("small", device="cpu", compute_type="int8")
+client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 async def transcribe(file_path: str, expected_text: str = None) -> str:
-    """
-    Transcribes an Arabic audio file using faster-whisper.
-    """
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(f"Audio file not found: {file_path}")
-
-    segments, info = model.transcribe(
-        file_path,
-        language="ar", # Explicitly set to Arabic
-        beam_size=5,
-        initial_prompt=expected_text,  # This hints Whisper on what to expect
-        vad_filter=True,  # Filter out silence
-        vad_parameters=dict(min_silence_duration_ms=500)
-    )
-    
-    text = " ".join([segment.text.strip() for segment in segments])
-    return text.strip()
+    with open(file_path, "rb") as audio_file:
+        transcription = client.audio.transcriptions.create(
+            model="whisper-large-v3",
+            file=audio_file,
+            language="ar",
+            prompt=expected_text or "",
+            response_format="text"
+        )
+    return transcription.strip()
