@@ -1,23 +1,24 @@
 import re
 import difflib
 
-def strip_diacritics(text: str) -> str:
-    """
-    Remove all Arabic diacritics (harakat) for comparison.
-    """
-    # Pattern includes Arabic signs (U+0600-U+060F), fatha, damma, kasra, sukun, shadda, tatweel (U+0640), superscript alef (U+0670)
-    return re.sub(r'[\u0600-\u060F\u0610-\u061A\u0640\u064B-\u065F\u0670]', '', text)
-
-def normalize_arabic(text: str) -> str:
-    """
-    Normalize Arabic character variants for robust comparison.
-    """
-    # Replace alif variants with plain alif (included ٱ U+0671)
+def normalize(text: str) -> str:
+    import re
+    # Remove diacritics
+    text = re.sub(r'[\u0610-\u061A\u064B-\u065F\u0670]', '', text)
+    # Normalize alef variants
     text = re.sub(r'[أإآٱ]', 'ا', text)
-    # Replace tey marbuta with heh
+    # Normalize teh marbuta
     text = re.sub(r'ة', 'ه', text)
-    # Replace alef maksura with yeh
+    # Normalize yeh
     text = re.sub(r'ى', 'ي', text)
+    # Normalize waw
+    text = re.sub(r'ؤ', 'و', text)
+    # Remove tatweel
+    text = re.sub(r'ـ', '', text)
+    # Remove non-Arabic characters
+    text = re.sub(r'[^\u0600-\u06FF\s]', '', text)
+    # Normalize whitespace
+    text = ' '.join(text.split())
     return text
 
 def compare_recitation(expected_text: str, transcribed_text: str):
@@ -25,9 +26,9 @@ def compare_recitation(expected_text: str, transcribed_text: str):
     Compare expected vs transcribed Arabic text at the word level.
     Returns (accuracy_score, diff_list).
     """
-    # Strip diacritics and normalize characters
-    clean_expected = normalize_arabic(strip_diacritics(expected_text))
-    clean_transcribed = normalize_arabic(strip_diacritics(transcribed_text))
+    # Normalize expected and transcribed texts
+    clean_expected = normalize(expected_text)
+    clean_transcribed = normalize(transcribed_text)
     
     # Split into words and remove punctuation noise
     expected_words_raw = expected_text.split()
@@ -42,10 +43,12 @@ def compare_recitation(expected_text: str, transcribed_text: str):
     for tag, i1, i2, j1, j2 in matcher.get_opcodes():
         if tag == 'equal':
             for i in range(i1, i2):
-                diff_results.append({"word": expected_words_raw[i], "status": "correct"})
+                if i < len(expected_words_raw):
+                    diff_results.append({"word": expected_words_raw[i], "status": "correct"})
         elif tag == 'replace' or tag == 'delete':
             for i in range(i1, i2):
-                diff_results.append({"word": expected_words_raw[i], "status": "incorrect"})
+                if i < len(expected_words_raw):
+                    diff_results.append({"word": expected_words_raw[i], "status": "incorrect"})
                 
     accuracy = sum(1 for d in diff_results if d["status"] == "correct") / len(diff_results) if diff_results else 0
     return round(accuracy, 2), diff_results
