@@ -97,12 +97,32 @@ Open the URL shown by Vite (default: http://localhost:5173).
 ---
 
 ## Usage Examples
-- Recording and feedback: Use the web UI to select a verse, record, and request feedback.
-- API (developer): See docs/API_REFERENCE.md for exact endpoints. Example (high-level):
+- **Recording and feedback:** Use the web UI to select a verse, record, and request feedback.
+- **Interactive API docs (Swagger UI):** Once the backend is running, visit **http://localhost:8000/docs** to explore and test all endpoints directly in the browser. ReDoc is also available at http://localhost:8000/redoc.
 
-  POST /api/feedback  - multipart/form-data { audio: file, verse: "2:255" }
+### `curl` Examples
 
-If you want precise curl examples, confirm which endpoints to document and they will be added here.
+**Fetch all Surahs:**
+```bash
+curl http://localhost:8000/api/v1/surahs
+```
+
+**Fetch verses for Surah Al-Fatihah (ID 1):**
+```bash
+curl http://localhost:8000/api/v1/surahs/1/verses
+```
+
+**Upload a recitation for feedback** (multipart, `.webm` blob required):
+```bash
+curl -X POST http://localhost:8000/api/v1/recitations/upload \
+  -F "audio=@/path/to/recording.webm;type=audio/webm" \
+  -F "verse_id=1"
+```
+
+**Health check:**
+```bash
+curl http://localhost:8000/health
+```
 
 ---
 
@@ -124,15 +144,12 @@ See CONTRIBUTING.md (in /docs or add one) for full instructions.
 ---
 
 ## Project Documentation
-- docs/SYSTEM_ARCHITECTURE.md
-- docs/API_REFERENCE.md
-- docs/DEVELOPMENT_GUIDE.md
+- [System Architecture](docs/SYSTEM_ARCHITECTURE.md)
+- [API Reference](docs/API_REFERENCE.md)
+- [Development Guide](docs/DEVELOPMENT_GUIDE.md)
+- [Contributing](CONTRIBUTING.md)
 
 ---
 
 ## License
 MIT — see LICENSE file.
-
----
-
-If this README should include concrete curl examples, screenshots, or CI badges, confirm which endpoints and assets to include and they will be added.
