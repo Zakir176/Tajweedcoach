@@ -25,8 +25,50 @@ The Tajweed Recitation Coach follows a three-tier client-server architecture pai
 
 ## Core Recitation Request Flow
 
+```mermaid
+sequenceDiagram
+    actor User
+    participant Vue as Vue 3 SPA
+    participant FastAPI as FastAPI Backend
+    participant Redis as Redis Cache
+    participant DB as PostgreSQL
+    participant Whisper as Faster-Whisper
+    participant Diff as Diff Engine (difflib)
+    participant Ollama as Ollama LLM
+    participant CDN as EveryAyah CDN
+
+    User->>Vue: Select Surah & Ayah
+    Vue->>FastAPI: GET /api/v1/surahs/{id}/verses
+    FastAPI->>Redis: Check verse cache
+    alt Cache hit
+        Redis-->>FastAPI: Return cached verse
+    else Cache miss
+        FastAPI->>DB: Query verse text
+        DB-->>FastAPI: Arabic text + translation
+        FastAPI->>Redis: Store in cache
+    end
+    FastAPI-->>Vue: Verse text + metadata
+    Vue-->>User: Display Arabic verse
+
+    User->>Vue: Record & stop audio
+    Vue->>FastAPI: POST /api/v1/recitations/upload (WebM blob + verse_id)
+    FastAPI->>Whisper: Transcribe audio (lang=ar, initial_prompt=verse text)
+    Whisper-->>FastAPI: Arabic transcription string
+    FastAPI->>Diff: Compare transcript vs expected verse
+    Diff-->>FastAPI: Word-level diff array
+    FastAPI->>Ollama: Generate Tajweed feedback (diff + context)
+    Ollama-->>FastAPI: Natural language feedback
+    FastAPI->>DB: Persist session (score, diff, transcript, feedback)
+    FastAPI-->>Vue: Full payload (transcript, diff, score, feedback)
+
+    Vue-->>User: Display color-coded diff + feedback
+    Vue->>CDN: Fetch reference recitation audio
+    CDN-->>Vue: Sheikh audio stream
+    Vue-->>User: Play reference audio
+```
+
 1. **Verse Select:** The user selects a Surah and Ayah from the dropdown.
-2. **Verse Fetch:** Vue issues a GET request for verse text/metadata. FastAPI queries PostgeSQL/Redis and returns Arabic text alongside the English translation.
+2. **Verse Fetch:** Vue issues a GET request for verse text/metadata. FastAPI queries PostgreSQL/Redis and returns Arabic text alongside the English translation.
 3. **Capture:** The user clicks Record, speaks, and hits stop. Vue captures the stream as an audio blob.
 4. **Processing Pipeline:**
    - FastAPI passes the audio chunk strictly to the localized **Faster-Whisper** engine for transcription (`language="ar"`).

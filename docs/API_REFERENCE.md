@@ -1,6 +1,11 @@
 # API Reference
 
-All backend API requests are prefixed under `/api/v1` and managed by Python FastAPI. The application returns native JSON datasets across all `GET` routes, and specifically isolates raw HTTP Form Multipart processing for the audio intake endpoints. 
+All backend API requests are prefixed under `/api/v1` and managed by Python FastAPI. The application returns native JSON datasets across all `GET` routes, and specifically isolates raw HTTP Form Multipart processing for the audio intake endpoints.
+
+> **💡 Interactive Docs:** When the backend is running, FastAPI auto-generates fully interactive documentation. No `curl` required — you can send real requests directly from the browser:
+> - **Swagger UI:** http://localhost:8000/docs
+> - **ReDoc:** http://localhost:8000/redoc
+> - **OpenAPI schema:** http://localhost:8000/openapi.json
 
 ---
 
