@@ -178,7 +178,7 @@ onUnmounted(() => {
         </div>
 
         <!-- Feedback & Error -->
-        <p v-if="!isRecording && !audioUrl" class="text-sm font-bold text-gray-400 uppercase tracking-widest mt-[-1rem]">Tap to Record</p>
+        <p v-if="!isRecording && !audioUrl" class="text-sm font-bold text-gray-400 uppercase tracking-widest -mt-4">Tap to Record</p>
 
         <p v-if="error" class="text-red-400 text-sm bg-red-900/20 px-4 py-2 rounded-lg border border-red-900/40">
           {{ error }}
