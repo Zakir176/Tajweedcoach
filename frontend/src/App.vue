@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-gray-50 flex flex-col">
     <nav class="bg-white shadow-sm sticky top-0 z-50">
       <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <router-link to="/" class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
+        <router-link to="/" class="text-xl font-bold bg-linear-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
           TajweedCoach
         </router-link>
         
