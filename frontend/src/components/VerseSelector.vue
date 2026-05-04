@@ -96,7 +96,7 @@ const verseOptions = computed(() => versesStore.verses)
         <!-- English Translation -->
         <div class="max-w-2xl mx-auto space-y-2">
             <div class="p-4 rounded-xl border border-indigo-50 bg-white/80 shadow-sm relative group overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-r from-indigo-500/0 via-indigo-500/5 to-indigo-500/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                <div class="absolute inset-0 bg-linear-to-r from-indigo-500/0 via-indigo-500/5 to-indigo-500/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                 <p class="text-lg text-gray-600 italic relative z-10 leading-relaxed">
                     "{{ versesStore.selectedVerse.text_english }}"
                 </p>
